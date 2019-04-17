@@ -21,7 +21,7 @@ var testPayloads = []struct {
 func TestFromBytes(t *testing.T) {
 	for _, tt := range testPayloads {
 		payload, err := FromBytes(tt.in)
-		if payload != &tt.outPayload || &err != &tt.outError {
+		if payload != tt.outPayload || &err != &tt.outError {
 			t.Errorf("FromBytes(%v) => %v, %v, want %v, %v", tt.in, payload, err, tt.outPayload, tt.outError)
 		}
 	}
