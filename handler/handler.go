@@ -101,7 +101,7 @@ func (self *MdHandler) Apply(request *processor_pb2.TpProcessRequest, context *p
 		product := &mdata_state.Product{
 			Gtin: payload.Gtin,
 			Mtrl: payload.Mtrl,
-			State: "ACTIVE"
+			State: "ACTIVE",
 		}
 		displayCreate(payload, signer)
 		return mdState.SetProduct(payload.Gtin, product)
@@ -189,7 +189,7 @@ func validateDeactivate(mdState *mdata_state.MdState, gtin string) error {
 }
 
 func displayDeactivate(payload *mdata_payload.MdPayload, signer string, product *mdata_state.Product) {
-	s := fmt.Sprintf("+ Signer %s updated product %s state to %s+", signer[:6], product.Gtin, payload.State)
+	s := fmt.Sprintf("+ Signer %s updated product %s state to %s+", signer[:6], product.Gtin, product.State)
 	sLength := len(s)
 	border := "+" + strings.Repeat("-", sLength-2) + "+"
 	fmt.Println(border)
