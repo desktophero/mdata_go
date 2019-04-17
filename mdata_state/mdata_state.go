@@ -35,8 +35,9 @@ by the transaction family which defines the namespace
 var Namespace = hexdigest("mdata")[:6]
 
 type Product struct {
-	Gtin string
-	Mtrl string
+	Gtin  string
+	Mtrl  string
+	State string
 }
 
 // MdState handles addressing, serialization, deserialization,
@@ -156,8 +157,9 @@ func deserialize(data []byte) (map[string]*Product, error) {
 		}
 
 		product := &Product{
-			Gtin: parts[0],
-			Mtrl: parts[1],
+			Gtin:  parts[0],
+			Mtrl:  parts[1],
+			State: parts[2],
 		}
 		products[parts[0]] = product
 	}
@@ -170,6 +172,8 @@ func serialize(products []*Product) []byte {
 		buffer.WriteString(product.Gtin)
 		buffer.WriteString(",")
 		buffer.WriteString(product.Mtrl)
+		buffer.WriteString(",")
+		buffer.WriteString(product.State)
 		if i+1 != len(products) {
 			buffer.WriteString("|")
 		}
