@@ -7,7 +7,7 @@ import (
 
 var testPayloads = []struct {
 	in         []byte
-	outPayload MdPayload
+	outPayload *MdPayload
 	outError   error
 }{
 	{nil, nil, &processor.InvalidTransactionError{Msg: "Must contain payload"}},
