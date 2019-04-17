@@ -7,7 +7,7 @@ import (
 
 var testPayloads = []struct {
 	in         []byte
-	outPayload *MdPayload
+	outPayload MdPayload
 	outError   error
 }{
 	{nil, nil, &processor.InvalidTransactionError{Msg: "Must contain payload"}},
@@ -21,7 +21,7 @@ var testPayloads = []struct {
 func TestFromBytes(t *testing.T) {
 	for _, tt := range testPayloads {
 		payload, err := FromBytes(tt.in)
-		if payload != tt.outPayload || err != tt.outError {
+		if payload != *tt.outPayload || &err != *tt.outError {
 			t.Errorf("FromBytes(%v) => %v, %v, want %v, %v", tt.in, payload, err, tt.outPayload, tt.outError)
 		}
 	}
