@@ -18,7 +18,7 @@ func FromBytes(payloadData []byte) (*MdPayload, error) {
 	}
 
 	parts := strings.Split(string(payloadData), ",")
-	if len(parts) != 3 {
+	if len(parts) < 2 {
 		return nil, &processor.InvalidTransactionError{Msg: "Payload is malformed"}
 	}
 
