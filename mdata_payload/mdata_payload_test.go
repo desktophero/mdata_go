@@ -61,8 +61,8 @@ func compareStructs(expected, actual *MdPayload) bool {
 				return false
 			}
 		case reflect.Int:
-			ev := strconv.FormatInt(expected_value.Int(), expected_value.Int())
-			av := strconv.FormatInt(actual_value.Int(), actual_value.Int())
+			ev := expected_value.Int()
+			av := actual_value.Int()
 			if ev != av {
 				return false
 			}
