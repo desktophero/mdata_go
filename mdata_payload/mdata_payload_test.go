@@ -3,7 +3,6 @@ package mdata_payload
 import (
 	"github.com/hyperledger/sawtooth-sdk-go/processor"
 	"reflect"
-	"strconv"
 	"testing"
 )
 
@@ -49,7 +48,7 @@ func compareStructs(expected, actual *MdPayload) bool {
 		actual_field := actual_fields.Field(i)
 		actual_value := actual_values.Field(i)
 
-		if expected_field != actual_field {
+		if expected_field.Name != actual_field.Name {
 			return false
 		}
 
