@@ -43,7 +43,7 @@ func compareStructs(expected, actual *MdPayload) bool {
 	}
 
 	var areEqual bool
-	for i := 0; i < num; i++ {
+	for i := 0; i < num_expected_fields; i++ {
 		expected_field := expected_fields.Field(i)
 		expected_value := expected_values.Field(i)
 		actual_field := actual_fields.Field(i)
