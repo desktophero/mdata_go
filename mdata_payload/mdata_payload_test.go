@@ -20,12 +20,13 @@ var testPayloads = []struct {
 }
 
 func compareExpectedActual(expectedErr error, actualError error) bool {
+	var areEqual bool
 	if expectedErr != nil {
-		return expectedErr.Error() == actualError.Error()
+		areEqual = expectedErr.Error() == actualError.Error()
+	} else {
+		areEqual = reflect.TypeOf(expectedErr) == reflect.TypeOf(actualError)
 	}
-	else {
-		return reflect.TypeOf(expectedErr) == reflect.TypeOf(actualError)
-	}
+	return areEqual
 }
 
 func TestFromBytes(t *testing.T) {
