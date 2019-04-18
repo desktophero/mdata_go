@@ -13,16 +13,25 @@ var testPayloads = []struct {
 }{
 	{nil, nil, &processor.InvalidTransactionError{Msg: "Must contain payload"}},
 	{[]byte("create"), nil, &processor.InvalidTransactionError{Msg: "Payload is malformed"}}, //len<2
-	//{[]byte("create,00012345600012,000000001400245446"), &MdPayload{Action: "create", Gtin: "00012345600012", Mtrl: "000000001400245446"}, nil},
+	{[]byte("create,00012345600012,000000001400245446"), &MdPayload{Action: "create", Gtin: "00012345600012", Mtrl: "000000001400245446"}, nil},
 	//{[]byte("create,00012345600012"), nil, &processor.InvalidTransactionError{Msg: "Mtrl is required for create and update"}},
 	//{[]byte("update,00012345600012,000000001400245446"), &MdPayload{Action: "update", Gtin: "00012345600012", Mtrl: "000000001400245446"}, nil},
 	//{[]byte("update,00012345600012"), nil, &processor.InvalidTransactionError{Msg: "Mtrl is required for create and update"}},
 }
 
+func compareExpectedActual(expectedErr error, actualError error) bool {
+	if expectedErr != nil {
+		return expectedErr.Error() == actualError.Error()
+	}
+	else {
+		return reflect.TypeOf(expectedErr) == reflect.TypeOf(actualError)
+	}
+}
+
 func TestFromBytes(t *testing.T) {
 	for _, tt := range testPayloads {
 		payload, err := FromBytes(tt.in)
-		if reflect.TypeOf(payload) != reflect.TypeOf(tt.outPayload) || err.Error() != tt.outError.Error() {
+		if reflect.TypeOf(payload) != reflect.TypeOf(tt.outPayload) || compareExpectedActual(tt.outError, err) != true {
 			t.Errorf("FromBytes(%v) => GOT %v, %v, WANT %v, %v", tt.in, payload, err, tt.outPayload, tt.outError)
 		}
 	}
