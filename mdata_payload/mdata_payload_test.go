@@ -32,7 +32,7 @@ func compareExpectedActualError(expectedErr error, actualError error) bool {
 func compareExpectedActualPayload(expectedPayload *MdPayload, actualPayload *MdPayload) bool {
 	var areEqual bool
 	if expectedPayload != nil {
-		areEqual = reflect.ValueOf(expectedPayload) == reflect.ValueOf(actualPayload)
+		areEqual = reflect.ValueOf(&expectedPayload) == reflect.ValueOf(&actualPayload)
 	} else {
 		areEqual = reflect.TypeOf(expectedPayload) == reflect.TypeOf(actualPayload)
 	}
