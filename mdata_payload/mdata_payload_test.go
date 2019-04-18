@@ -29,14 +29,10 @@ func compareExpectedActualError(expectedErr error, actualError error) bool {
 	return areEqual
 }
 
-// func comparePayloads(p1, p2 MdPayload) bool {
-// 	if
-// }
-
 func compareExpectedActualPayload(expectedPayload *MdPayload, actualPayload *MdPayload) bool {
 	var areEqual bool
 	if expectedPayload != nil {
-		areEqual = &expectedPayload == actualPayload
+		areEqual = reflect.ValueOf(expectedPayload) == reflect.ValueOf(actualPayload)
 	} else {
 		areEqual = reflect.TypeOf(expectedPayload) == reflect.TypeOf(actualPayload)
 	}
