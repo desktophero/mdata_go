@@ -34,7 +34,7 @@ func compareExpectedActualPayload(expectedPayload *MdPayload, actualPayload *MdP
 	if expectedPayload != nil {
 		areEqual = expectedPayload == actualPayload
 	} else {
-		areEqual = reflect.TypeOf(expectedPayload) == reflect.TypeOf(tt.actualPayload)
+		areEqual = reflect.TypeOf(expectedPayload) == reflect.TypeOf(actualPayload)
 	}
 	return areEqual
 }
