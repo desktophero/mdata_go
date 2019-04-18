@@ -2,6 +2,7 @@ package mdata_payload
 
 import (
 	"github.com/hyperledger/sawtooth-sdk-go/processor"
+	"reflect"
 	"testing"
 )
 
@@ -21,7 +22,7 @@ var testPayloads = []struct {
 func TestFromBytes(t *testing.T) {
 	for _, tt := range testPayloads {
 		payload, err := FromBytes(tt.in)
-		if payload.type() != tt.outPayload.type() || err.Error() != tt.outError.Error() {
+		if reflect.TypeOf(payload) != reflect.TypeOf(tt.outPayload) || err.Error() != tt.outError.Error() {
 			t.Errorf("FromBytes(%v) => GOT %v, %v, WANT %v, %v", tt.in, payload, err, tt.outPayload, tt.outError)
 		}
 	}
