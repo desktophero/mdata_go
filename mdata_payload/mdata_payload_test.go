@@ -29,10 +29,41 @@ func compareExpectedActualError(expectedErr error, actualError error) bool {
 	return areEqual
 }
 
+func compareStructs(expected, actual *MdPayload) {
+	expected_fields := reflect.TypeOf(expected)
+	expected_values := reflect.ValueOf(expected)
+	num_expected_fields := expected_fields.NumField()
+
+	actual_fields := reflect.TypeOf(actual)
+	actual_values := reflect.ValueOf(actual)
+	num_actual_fields := actual_fields.NumField()
+
+	if num_expected_fields != num_actual_fields {
+		return false
+	}
+
+	var areEqual bool
+	for i := 0; i < num; i++ {
+		expected_field := expected_fields.Field(i)
+		expected_value := expected_values.Field(i)
+		actual_field := actual_fields.Field(i)
+		actual_value := actual_values.Field(i)
+
+		if expected_field != actual_field || expected_value != actual_value {
+			areEqual = false
+		}
+		if areEqual == false {
+			return areEqual
+		}
+	}
+	areEqual = true
+	return areEqual
+}
+
 func compareExpectedActualPayload(expectedPayload *MdPayload, actualPayload *MdPayload) bool {
 	var areEqual bool
 	if expectedPayload != nil {
-		areEqual = reflect.ValueOf(&expectedPayload) == reflect.ValueOf(&actualPayload)
+		areEqual = compareStructs(expectedPayload, actualPayload)
 	} else {
 		areEqual = reflect.TypeOf(expectedPayload) == reflect.TypeOf(actualPayload)
 	}
