@@ -29,7 +29,7 @@ func compareExpectedActualError(expectedErr error, actualError error) bool {
 	return areEqual
 }
 
-func compareStructs(expected, actual *MdPayload) {
+func compareStructs(expected, actual *MdPayload) bool {
 	expected_fields := reflect.TypeOf(expected)
 	expected_values := reflect.ValueOf(expected)
 	num_expected_fields := expected_fields.NumField()
