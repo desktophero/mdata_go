@@ -35,7 +35,7 @@ func FromBytes(payloadData []byte) (*MdPayload, error) {
 	}
 
 	if payload.Action == "create" || payload.Action == "update" {
-		if len(parts) < 3  || len(parts[2] < 1{
+		if len(parts) < 3 || len(parts[2]) < 1 {
 			return nil, &processor.InvalidTransactionError{Msg: "Mtrl is required for create and update"}
 		}
 	}
