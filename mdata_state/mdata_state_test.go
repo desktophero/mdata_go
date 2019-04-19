@@ -1,40 +1,36 @@
 package mdata_state
 
 import (
-	"testing"
 	"errors"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
-
 
 var testGtin string = "01234567891234"
 var testGtinAddress string = makeAddress(testGtin)
-
-
 
 func TestGetProduct(t *testing.T) {
 	sampleError := errors.New("sample")
 
 	tests := map[string]struct {
-		gtin string
+		gtin       string
 		outProduct *Product
-		err error
-
+		err        error
 	}{
 		"error": {
-			gtin: testGtin,
+			gtin:       testGtin,
 			outProduct: nil,
-			err: sampleError,
+			err:        sampleError,
 		},
 		"emptyProduct": {
-			gtin: testGtin,
+			gtin:       testGtin,
 			outProduct: nil,
-			err: nil,
+			err:        nil,
 		},
 		"existingProduct": {
-			gtin: testGtin,
+			gtin:       testGtin,
 			outProduct: &Product{Gtin: testGtin, Mtrl: "", State: ""},
-			err: nil,
+			err:        nil,
 		},
 	}
 
@@ -45,11 +41,12 @@ func TestGetProduct(t *testing.T) {
 
 		if name == "existingProduct" {
 			returnAddress := make(map[string][]byte)
+			returnAddress[testGtinAddress] = []byte(testGtin)
 			context.On("GetState", []string{testGtin}).Return(
-				returnAddress[testGtinAddress] = []byte(testGtin),
+				returnAddress,
 				nil,
 			)
-		} 
+		}
 		if name == "emptyProduct" {
 			context.On("GetState", []string{testGtin}).Return(
 				nil,
@@ -64,7 +61,7 @@ func TestGetProduct(t *testing.T) {
 		}
 
 		testState := &MdState{
-			context: context,
+			context:      context,
 			addressCache: make(map[string][]byte),
 		}
 
