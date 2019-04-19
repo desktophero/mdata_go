@@ -17,11 +17,11 @@ func TestGetProduct(t *testing.T) {
 		outProduct *Product
 		err        error
 	}{
-		"error": {
-			gtin:       testGtin,
-			outProduct: nil,
-			err:        sampleError,
-		},
+		// "error": {
+		// 	gtin:       testGtin,
+		// 	outProduct: nil,
+		// 	err:        sampleError,
+		// },
 		"emptyProduct": {
 			gtin:       testGtin,
 			outProduct: nil,
@@ -53,12 +53,12 @@ func TestGetProduct(t *testing.T) {
 				nil,
 			)
 		}
-		if name == "error" {
-			context.On("GetState", []string{testGtin}).Return(
-				nil,
-				sampleError,
-			)
-		}
+		// if name == "error" {
+		// 	context.On("GetState", []string{testGtin}).Return(
+		// 		nil,
+		// 		sampleError,
+		// 	)
+		// }
 
 		testState := &MdState{
 			context:      context,
