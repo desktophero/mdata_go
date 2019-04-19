@@ -29,7 +29,7 @@ func TestGetProduct(t *testing.T) {
 		},
 		"existingProduct": {
 			gtin:       testGtin,
-			outProduct: &Product{Gtin: testGtin, Mtrl: "12344567-89000", State: ""},
+			outProduct: *Product{Gtin: testGtin, Mtrl: "12344567-89000", State: ""},
 			err:        nil,
 		},
 	}
