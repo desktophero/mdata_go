@@ -10,7 +10,7 @@ var testGtin string = "01234567891234"
 var testGtinAddress string = makeAddress(testGtin)
 
 func TestGetProduct(t *testing.T) {
-	sampleError := errors.New("sample")
+	//sampleError := errors.New("sample")
 
 	tests := map[string]struct {
 		gtin       string
