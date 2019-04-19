@@ -1,7 +1,7 @@
 package mdata_state
 
 import (
-	"errors"
+	//"errors"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
