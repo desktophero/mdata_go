@@ -13,10 +13,14 @@ var testPayloads = []struct {
 }{
 	{nil, nil, &processor.InvalidTransactionError{Msg: "Must contain payload"}},
 	{[]byte("create"), nil, &processor.InvalidTransactionError{Msg: "Payload is malformed"}}, //len<2
+	{[]byte(",00012345600012,000000001400245446"), nil, &processor.InvalidTransactionError{Msg: "Action is required"}},
+	{[]byte("update,,000000001400245446"), nil, &processor.InvalidTransactionError{Msg: "Gtin is required"}},
 	{[]byte("create,00012345600012,000000001400245446"), &MdPayload{Action: "create", Gtin: "00012345600012", Mtrl: "000000001400245446"}, nil},
 	{[]byte("create,00012345600012"), nil, &processor.InvalidTransactionError{Msg: "Mtrl is required for create and update"}},
 	{[]byte("update,00012345600012,000000001400245446"), &MdPayload{Action: "update", Gtin: "00012345600012", Mtrl: "000000001400245446"}, nil},
 	{[]byte("update,00012345600012"), nil, &processor.InvalidTransactionError{Msg: "Mtrl is required for create and update"}},
+	{[]byte("update,000123|45600012,000000001400245446"), nil, &processor.InvalidTransactionError{Msg: "Invalid Name (char '|' not allowed): '000123|45600012'"}},
+	{[]byte("update,00012345600012,00000000|1400245446"), nil, &processor.InvalidTransactionError{Msg: "Invalid Name (char '|' not allowed): '00000000|1400245446'"}},
 }
 
 func compareExpectedActualError(expectedErr error, actualError error) bool {

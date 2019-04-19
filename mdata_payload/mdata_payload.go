@@ -3,6 +3,7 @@ package mdata_payload
 import (
 	"fmt"
 	"github.com/hyperledger/sawtooth-sdk-go/processor"
+	"reflect"
 	"strings"
 )
 
@@ -10,6 +11,31 @@ type MdPayload struct {
 	Action string
 	Gtin   string
 	Mtrl   string
+}
+
+func (p MdPayload) CheckForInvaildChar() (bool, string) {
+	values := reflect.ValueOf(p)
+	num := values.NumField()
+
+	for i := 0; i < num; i++ {
+		v := values.Field(i)
+		if v.Kind() == reflect.String {
+			strv := v.String()
+			if strings.Contains(strv, "|") {
+				return true, strv
+			}
+		}
+	}
+
+	return false, ""
+}
+
+func (p MdPayload) JsonString() string {
+	out, err := json.Marshal(p)
+	if err != nil {
+		panic(err)
+	}
+	return string(out)
 }
 
 func FromBytes(payloadData []byte) (*MdPayload, error) {
@@ -41,9 +67,10 @@ func FromBytes(payloadData []byte) (*MdPayload, error) {
 		payload.Mtrl = parts[2]
 	}
 
-	if strings.Contains(payload.Gtin, "|") {
+	isInvalid, invalidString := payload.CheckForInvaildChar()
+	if isInvalid {
 		return nil, &processor.InvalidTransactionError{
-			Msg: fmt.Sprintf("Invalid Name (char '|' not allowed): '%v'", parts[1])}
+			Msg: fmt.Sprintf("Invalid Name (char '|' not allowed): '%v'", invalidString)}
 	}
 
 	return &payload, nil
