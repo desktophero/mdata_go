@@ -42,19 +42,19 @@ func TestGetProduct(t *testing.T) {
 		if name == "existingProduct" {
 			returnAddress := make(map[string][]byte)
 			returnAddress[testGtinAddress] = []byte(testGtin)
-			context.On("GetState", []string{testGtin}).Return(
+			testContext.On("GetState", []string{testGtin}).Return(
 				returnAddress,
 				nil,
 			)
 		}
 		if name == "emptyProduct" {
-			context.On("GetState", []string{testGtin}).Return(
+			testContext.On("GetState", []string{testGtin}).Return(
 				nil,
 				nil,
 			)
 		}
 		if name == "error" {
-			context.On("GetState", []string{testGtin}).Return(
+			testContext.On("GetState", []string{testGtin}).Return(
 				nil,
 				sampleError,
 			)
