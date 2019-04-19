@@ -30,14 +30,6 @@ func (p MdPayload) CheckForInvaildChar() (bool, string) {
 	return false, ""
 }
 
-func (p MdPayload) JsonString() string {
-	out, err := json.Marshal(p)
-	if err != nil {
-		panic(err)
-	}
-	return string(out)
-}
-
 func FromBytes(payloadData []byte) (*MdPayload, error) {
 	if payloadData == nil {
 		return nil, &processor.InvalidTransactionError{Msg: "Must contain payload"}
