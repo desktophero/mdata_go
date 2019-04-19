@@ -22,19 +22,19 @@ func TestGetProduct(t *testing.T) {
 
 	}{
 		"error": {
-			gtin: testGtin
-			outProduct: nil
-			err: sampleError
+			gtin: testGtin,
+			outProduct: nil,
+			err: sampleError,
 		},
 		"emptyProduct": {
-			gtin: testGtin
-			outProduct: nil
-			err: nil
+			gtin: testGtin,
+			outProduct: nil,
+			err: nil,
 		},
 		"existingProduct": {
-			gtin: testGtin
-			outProduct: &Product{Gtin: testGtin, Mtrl: "", State: ""}
-			err: nil
+			gtin: testGtin,
+			outProduct: &Product{Gtin: testGtin, Mtrl: "", State: ""},
+			err: nil,
 		},
 	}
 
