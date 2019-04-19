@@ -69,7 +69,7 @@ func TestGetProduct(t *testing.T) {
 		assert.Equal(t, test.outProduct, product)
 		assert.Equal(t, test.err, err)
 
-		context.AssertExpectations(t)
+		testContext.AssertExpectations(t)
 
 	}
 }
