@@ -28,6 +28,12 @@ import (
 	"github.com/hyperledger/sawtooth-sdk-go/processor"
 )
 
+type context interface {
+	GetState([]string) (map[string][]byte, error)
+	DeleteState([]string) ([]string, error)
+	SetState(map[string][]byte) ([]string, error)
+}
+
 /* Namespace prefix is six hex characters, or three bytes
 All data under a namespace prefix follows a consistent address and data encoding/serialization schem that is determined
 by the transaction family which defines the namespace
@@ -43,7 +49,7 @@ type Product struct {
 // MdState handles addressing, serialization, deserialization,
 // and holding an addressCache of data at the address.
 type MdState struct {
-	context      *processor.Context
+	context      context
 	addressCache map[string][]byte
 }
 
