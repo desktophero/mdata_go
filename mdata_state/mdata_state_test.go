@@ -62,7 +62,6 @@ func TestGetProduct(t *testing.T) {
 				sampleError,
 			)
 		}
-		}
 
 		testState := &MdState{
 			context: context,
@@ -76,10 +75,6 @@ func TestGetProduct(t *testing.T) {
 		context.AssertExpectations(t)
 
 	}
-
-
-	
-	testState.GetProduct(testGtin)
 }
 
 func TestDeleteProducts(t *testing.T) {
