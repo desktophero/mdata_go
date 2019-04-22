@@ -187,8 +187,8 @@ func serialize(products []*Product) []byte {
 	return buffer.Bytes()
 }
 
-func makeAddress(name string) string {
-	return Namespace + hexdigest(name)[:64]
+func makeAddress(gtin string) string {
+	return Namespace + hexdigest(gtin)[:64]
 }
 
 func hexdigest(str string) string {

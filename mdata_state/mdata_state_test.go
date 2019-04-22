@@ -7,7 +7,14 @@ import (
 )
 
 var testGtin string = "01234567891234"
+var testMtrl string = "12345-67890"
+var testState string = "ACTIVE"
 var testGtinAddress string = makeAddress(testGtin)
+var testProduct Product{
+	Gtin: testGtin,
+	Mtrl: testMtrl,
+	State: testState,
+}
 
 func TestGetProduct(t *testing.T) {
 	sampleError := errors.New("sample")
@@ -29,7 +36,7 @@ func TestGetProduct(t *testing.T) {
 		},
 		"existingProduct": {
 			gtin:       testGtin,
-			outProduct: *Product{Gtin: testGtin, Mtrl: "12344567-89000", State: ""},
+			outProduct: &Product{Gtin: testGtin, Mtrl: "12344567-89000", State: ""},
 			err:        nil,
 		},
 	}
@@ -41,7 +48,7 @@ func TestGetProduct(t *testing.T) {
 
 		if name == "existingProduct" {
 			returnAddress := make(map[string][]byte)
-			returnAddress[testGtinAddress] = []byte(testGtin)
+			returnAddress[testGtinAddress] = serialize(testProduct)
 			testContext.On("GetState", []string{testGtinAddress}).Return(
 				returnAddress,
 				nil,
