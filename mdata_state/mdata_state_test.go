@@ -112,11 +112,6 @@ func TestSetProduct(t *testing.T) {
 	for name, test := range tests {
 		t.Logf("Running test case: %s", name)
 
-		testState := &MdState{
-			context:      testContext,
-			addressCache: make(map[string][]byte),
-		}
-
 		testContext := &mockContext{}
 		testProductSlice := make([]*Product, 1)
 		testProductSlice[0] = &testProduct
@@ -149,6 +144,11 @@ func TestSetProduct(t *testing.T) {
 				nil,
 			)
 
+		}
+
+		testState := &MdState{
+			context:      testContext,
+			addressCache: make(map[string][]byte),
 		}
 
 		err := testState.SetProduct(test.gtin, test.inProduct)
