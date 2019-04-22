@@ -15,6 +15,8 @@ var testProduct Product = Product{
 	Mtrl:  testMtrl,
 	State: testState,
 }
+var testProductSlice []*Product = make([]*Product,1)
+testProductSlice[0] = testProduct
 
 func TestGetProduct(t *testing.T) {
 	sampleError := errors.New("sample")
@@ -48,7 +50,7 @@ func TestGetProduct(t *testing.T) {
 
 		if name == "existingProduct" {
 			returnAddress := make(map[string][]byte)
-			returnAddress[testGtinAddress] = serialize(testProduct)
+			returnAddress[testGtinAddress] = serialize(testProductSlice)
 			testContext.On("GetState", []string{testGtinAddress}).Return(
 				returnAddress,
 				nil,
