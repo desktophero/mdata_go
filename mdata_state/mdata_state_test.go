@@ -8,6 +8,7 @@ import (
 
 var testGtin string = "01234567891234"
 var testMtrl string = "12345-67890"
+var testSetNewMtrl string = "67890-12345"
 var testState string = "ACTIVE"
 var testGtinAddress string = makeAddress(testGtin)
 var testProduct Product = Product{
@@ -15,9 +16,14 @@ var testProduct Product = Product{
 	Mtrl:  testMtrl,
 	State: testState,
 }
+var testSetNewProduct Product = Product{
+	Gtin:  testGtin,
+	Mtrl:  testSetNewMtrl,
+	State: testState,
+}
+var sampleError = errors.New("sample")
 
 func TestGetProduct(t *testing.T) {
-	sampleError := errors.New("sample")
 
 	tests := map[string]struct {
 		gtin       string
@@ -47,13 +53,13 @@ func TestGetProduct(t *testing.T) {
 		testContext := &mockContext{}
 
 		if name == "existingProduct" {
-			returnAddress := make(map[string][]byte)
+			returnProduct := make(map[string][]byte)
 			testProductSlice := make([]*Product, 1)
 			testProductSlice[0] = &testProduct
 
-			returnAddress[testGtinAddress] = serialize(testProductSlice)
+			returnProduct[testGtinAddress] = serialize(testProductSlice)
 			testContext.On("GetState", []string{testGtinAddress}).Return(
-				returnAddress,
+				returnProduct,
 				nil,
 			)
 		}
@@ -75,7 +81,7 @@ func TestGetProduct(t *testing.T) {
 			addressCache: make(map[string][]byte),
 		}
 
-		product, err := testState.GetProduct(testGtin)
+		product, err := testState.GetProduct(test.gtin)
 		assert.Equal(t, test.outProduct, product)
 		assert.Equal(t, test.err, err)
 
@@ -84,10 +90,80 @@ func TestGetProduct(t *testing.T) {
 	}
 }
 
-func TestDeleteProducts(t *testing.T) {
+func TestSetProduct(t *testing.T) {
 
+	tests := map[string]struct {
+		gtin      string
+		inProduct *Product
+		err       error
+	}{
+		"newProduct": {
+			gtin:      testGtin,
+			inProduct: &testProduct,
+			err:       nil,
+		},
+		"updateProductState": {
+			gtin:      testGtin,
+			inProduct: &testSetNewProduct,
+			err:       nil,
+		},
+	}
+
+	for name, test := range tests {
+		t.Logf("Running test case: %s", name)
+
+		testState := &MdState{
+			context:      testContext,
+			addressCache: make(map[string][]byte),
+		}
+
+		testContext := &mockContext{}
+		testProductSlice := make([]*Product, 1)
+		testProductSlice[0] = &testProduct
+
+		if name == "newProduct" {
+			products := make(map[string]*Product)
+			testContext.On("GetState", []string{testGtinAddress}).Return(
+				products,
+				nil,
+			)
+
+			data := serialize(testProductSlice)
+			testContext.On("SetState", map[string][]byte{
+				testGtinAddress: data,
+				}
+			).Return(
+						[]string{testGtinAddress},
+						nil,
+					)
+		}
+
+		if name == "updateProductState" {
+			returnProduct := make(map[string][]byte)
+			returnProduct[testGtinAddress] = serialize(testProductSlice)
+			testContext.On("GetState", []string{testGtinAddress}).Return(
+				returnProduct,
+				nil,
+			)
+
+			data := serialize([]*Product{&testSetNewProduct})
+			testContext.On("SetState", map[string][]byte{
+				testGtinAddress: data,
+				}
+			).Return(
+						[]string{testGtinAddress},
+						nil,
+					)
+
+		}
+
+		err := testState.SetProduct(test.gtin, test.inProduct)
+		assert.Equal(t, test.err, err)
+		testContext.AssertExpectations(t)
+
+	}
 }
 
-func TestLoadProducts(t *testing.T) {
+func TestDeleteProduct(t *testing.T) {
 
 }
