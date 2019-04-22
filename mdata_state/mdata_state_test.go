@@ -130,9 +130,9 @@ func TestSetProduct(t *testing.T) {
 
 			data := serialize(testProductSlice)
 			testContext.On("SetState", map[string][]byte{testGtinAddress: data}).Return(
-						[]string{testGtinAddress},
-						nil,
-					)
+				[]string{testGtinAddress},
+				nil,
+			)
 		}
 
 		if name == "updateProductState" {
@@ -144,13 +144,10 @@ func TestSetProduct(t *testing.T) {
 			)
 
 			data := serialize([]*Product{&testSetNewProduct})
-			testContext.On("SetState", map[string][]byte{
-				testGtinAddress: data,
-				}
-			).Return(
-						[]string{testGtinAddress},
-						nil,
-					)
+			testContext.On("SetState", map[string][]byte{testGtinAddress: data}).Return(
+				[]string{testGtinAddress},
+				nil,
+			)
 
 		}
 
