@@ -10,11 +10,11 @@ var testGtin string = "01234567891234"
 var testMtrl string = "12345-67890"
 var testState string = "ACTIVE"
 var testGtinAddress string = makeAddress(testGtin)
-var testProduct Product = Product(
-	Gtin: testGtin,
-	Mtrl: testMtrl,
+var testProduct Product = Product{
+	Gtin:  testGtin,
+	Mtrl:  testMtrl,
 	State: testState,
-)
+}
 
 func TestGetProduct(t *testing.T) {
 	sampleError := errors.New("sample")
