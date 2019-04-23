@@ -171,7 +171,7 @@ func TestDeleteProduct(t *testing.T) {
 			err:  nil,
 		},
 		"storeProductsWithoutDeleted": { //If other products exist, just storeProducts at the state address of the deleted Gtin
-			gtin: toDeleteGtinAddress,
+			gtin: toDeleteGtin,
 			err:  nil,
 		},
 	}
