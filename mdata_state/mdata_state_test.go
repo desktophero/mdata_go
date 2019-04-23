@@ -178,17 +178,17 @@ func TestDeleteProduct(t *testing.T) {
 		t.Logf("Running test case: %s", name)
 
 		testContext := &mockContext{}
-		testProductSlice := make([]*Product, 2)
-		testProductSlice[0] = &testProduct
-		toDeleteGtin := "555555555555"
-		toDeleteGtinAddress := makeAddress(toDeleteGtin)
-		testProduct2 := Product{
-			Gtin:  toDeleteGtin,
-			Mtrl:  "77777-777777",
-			State: "INACTIVE",
-		}
 
-		testProductSlice[1] = &testProduct2
+		// testProductSlice := make([]*Product, 2)
+		// testProductSlice[0] = &testProduct
+		// toDeleteGtin := "555555555555"
+		// toDeleteGtinAddress := makeAddress(toDeleteGtin)
+		// testProduct2 := Product{
+		// 	Gtin:  toDeleteGtin,
+		// 	Mtrl:  "77777-777777",
+		// 	State: "INACTIVE",
+		// }
+		// testProductSlice[1] = &testProduct2
 
 		if name == "productDoesNotExist" {
 			returnState := make(map[string][]byte) // Return empty map
