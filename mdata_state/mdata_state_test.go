@@ -102,11 +102,11 @@ func TestSetProduct(t *testing.T) {
 			inProduct: &testProduct,
 			err:       nil,
 		},
-		"updateProductState": {
-			gtin:      testGtin,
-			inProduct: &testSetNewProduct,
-			err:       nil,
-		},
+		// "updateProductState": {
+		// 	gtin:      testGtin,
+		// 	inProduct: &testSetNewProduct,
+		// 	err:       nil,
+		// },
 	}
 
 	for name, test := range tests {
@@ -130,21 +130,21 @@ func TestSetProduct(t *testing.T) {
 			)
 		}
 
-		if name == "updateProductState" {
-			returnProduct := make(map[string][]byte)
-			returnProduct[testGtinAddress] = serialize(testProductSlice)
-			testContext.On("GetState", []string{testGtinAddress}).Return(
-				returnProduct,
-				nil,
-			)
+		// if name == "updateProductState" {
+		// 	returnProduct := make(map[string][]byte)
+		// 	returnProduct[testGtinAddress] = serialize(testProductSlice)
+		// 	testContext.On("GetState", []string{testGtinAddress}).Return(
+		// 		returnProduct,
+		// 		nil,
+		// 	)
 
-			data := serialize([]*Product{&testSetNewProduct})
-			testContext.On("SetState", map[string][]byte{testGtinAddress: data}).Return(
-				[]string{testGtinAddress},
-				nil,
-			)
+		// 	data := serialize([]*Product{&testSetNewProduct})
+		// 	testContext.On("SetState", map[string][]byte{testGtinAddress: data}).Return(
+		// 		[]string{testGtinAddress},
+		// 		nil,
+		// 	)
 
-		}
+		// }
 
 		testState := &MdState{
 			context:      testContext,
