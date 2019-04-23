@@ -168,10 +168,10 @@ func TestDeleteProduct(t *testing.T) {
 			gtin: testGtin,
 			err:  nil,
 		},
-		"storeProductsWithoutDeleted": { //If other products exist, just storeProducts at the state address of the deleted Gtin
-			gtin: testGtin,
-			err:  nil,
-		},
+		// "storeProductsWithoutDeleted": { //If other products exist, just storeProducts at the state address of the deleted Gtin
+		// 	gtin: testGtin,
+		// 	err:  nil,
+		// },
 	}
 
 	for name, test := range tests {
@@ -203,21 +203,21 @@ func TestDeleteProduct(t *testing.T) {
 			).Once()
 		}
 
-		if name == "storeProductsWithoutDeleted" {
-			returnState := make(map[string][]byte)
-			returnState[toDeleteGtinAddress] = serialize(testProductSlice)
-			testContext.On("GetState", []string{toDeleteGtinAddress}).Return(
-				returnState,
-				nil,
-			)
+		// if name == "storeProductsWithoutDeleted" {
+		// 	returnState := make(map[string][]byte)
+		// 	returnState[toDeleteGtinAddress] = serialize(testProductSlice)
+		// 	testContext.On("GetState", []string{toDeleteGtinAddress}).Return(
+		// 		returnState,
+		// 		nil,
+		// 	)
 
-			data := serialize([]*Product{&testProduct})
-			testContext.On("SetState", map[string][]byte{toDeleteGtinAddress: data}).Return(
-				[]string{toDeleteGtinAddress},
-				nil,
-			).Once()
+		// 	data := serialize([]*Product{&testProduct})
+		// 	testContext.On("SetState", map[string][]byte{toDeleteGtinAddress: data}).Return(
+		// 		[]string{toDeleteGtinAddress},
+		// 		nil,
+		// 	).Once()
 
-		}
+		// }
 
 		testState := &MdState{
 			context:      testContext,
