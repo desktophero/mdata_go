@@ -160,4 +160,64 @@ func TestSetProduct(t *testing.T) {
 
 func TestDeleteProduct(t *testing.T) {
 
+	tests := map[string]struct {
+		gtin string
+		err  error
+	}{
+		"productDoesNotExist": { //Delete state at testGtin address
+			gtin: testGtin,
+			err:  nil,
+		},
+		// "storeProductsWithoutDeleted": { //If other products exist, just storeProducts at the state address of the deleted Gtin
+		// 	gtin: testGtin,
+		// 	err:  nil,
+		// },
+	}
+
+	for name, test := range tests {
+		t.Logf("Running test case: %s", name)
+
+		testContext := &mockContext{}
+
+		if name == "productDoesNotExist" {
+			returnState := make(map[string][]byte) // Return empty map
+			testContext.On("GetState", []string{testGtinAddress}).Return(
+				returnState,
+				nil,
+			)
+
+			data := serialize(testProductSlice)
+			testContext.On("DeleteState", []string{testGtinAddress}).Return(
+				make([]string),
+				nil,
+			).Once
+		}
+
+		// if name == "storeProductsWithoutDeleted" {
+		// 	returnState := make(map[string][]byte)
+		// 	returnState[testGtinAddress] = serialize(testProductSlice)
+		// 	testContext.On("GetState", []string{testGtinAddress}).Return(
+		// 		returnState,
+		// 		nil,
+		// 	)
+
+		// 	data := serialize([]*Product{&testSetNewProduct})
+		// 	testContext.On("DeleteState", map[string][]byte{testGtinAddress: data}).Return(
+		// 		[]string{testGtinAddress},
+		// 		nil,
+		// 	).Once
+
+		// }
+
+		testState := &MdState{
+			context:      testContext,
+			addressCache: make(map[string][]byte),
+		}
+
+		err := testState.DeleteProduct(test.gtin)
+		assert.Equal(t, test.err, err)
+		testContext.AssertExpectations(t)
+
+	}
+
 }
