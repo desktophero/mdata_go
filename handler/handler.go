@@ -52,6 +52,7 @@ func (self *MdHandler) Namespaces() []string {
 	return []string{mdata_state.Namespace}
 }
 
+//Signature before interfaces:
 func (self *MdHandler) Apply(request *processor_pb2.TpProcessRequest, context *processor.Context) error {
 
 	// type TpProcessRequest struct {
@@ -90,7 +91,7 @@ func (self *MdHandler) Apply(request *processor_pb2.TpProcessRequest, context *p
 	mdState := mdata_state.NewMdState(context)
 
 	logger.Debugf("mdata txn %v: signer %v: payload: Action='%v', Gtin='%v', Material='%v'",
-		request.Signature, signer, payload.Gtin, payload.Mtrl)
+		request.GetSignature(), signer, payload.Gtin, payload.Mtrl)
 
 	switch payload.Action {
 	case "create":
@@ -99,8 +100,8 @@ func (self *MdHandler) Apply(request *processor_pb2.TpProcessRequest, context *p
 			return err
 		}
 		product := &mdata_state.Product{
-			Gtin: payload.Gtin,
-			Mtrl: payload.Mtrl,
+			Gtin:  payload.Gtin,
+			Mtrl:  payload.Mtrl,
 			State: "ACTIVE",
 		}
 		displayCreate(payload, signer)
