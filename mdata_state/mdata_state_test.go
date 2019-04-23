@@ -186,7 +186,6 @@ func TestDeleteProduct(t *testing.T) {
 				nil,
 			)
 
-			data := serialize(testProductSlice)
 			testContext.On("DeleteState", []string{testGtinAddress}).Return(
 				nil,
 				nil,
