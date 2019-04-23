@@ -11,6 +11,8 @@ var testMtrl string = "12345-67890"
 var testSetNewMtrl string = "67890-12345"
 var testState string = "ACTIVE"
 var testGtinAddress string = makeAddress(testGtin)
+var toDeleteGtin string = "555555555555"
+var toDeleteGtinAddress string = makeAddress(toDeleteGtin)
 var testProduct Product = Product{
 	Gtin:  testGtin,
 	Mtrl:  testMtrl,
@@ -168,10 +170,10 @@ func TestDeleteProduct(t *testing.T) {
 			gtin: testGtin,
 			err:  nil,
 		},
-		// "storeProductsWithoutDeleted": { //If other products exist, just storeProducts at the state address of the deleted Gtin
-		// 	gtin: testGtin,
-		// 	err:  nil,
-		// },
+		"storeProductsWithoutDeleted": { //If other products exist, just storeProducts at the state address of the deleted Gtin
+			gtin: toDeleteGtinAddress,
+			err:  nil,
+		},
 	}
 
 	for name, test := range tests {
@@ -179,16 +181,15 @@ func TestDeleteProduct(t *testing.T) {
 
 		testContext := &mockContext{}
 
-		// testProductSlice := make([]*Product, 2)
-		// testProductSlice[0] = &testProduct
-		// toDeleteGtin := "555555555555"
-		// toDeleteGtinAddress := makeAddress(toDeleteGtin)
-		// testProduct2 := Product{
-		// 	Gtin:  toDeleteGtin,
-		// 	Mtrl:  "77777-777777",
-		// 	State: "INACTIVE",
-		// }
-		// testProductSlice[1] = &testProduct2
+		testProductSlice := make([]*Product, 2)
+		testProductSlice[0] = &testProduct
+
+		testProduct2 := Product{
+			Gtin:  toDeleteGtin,
+			Mtrl:  "77777-777777",
+			State: "INACTIVE",
+		}
+		testProductSlice[1] = &testProduct2
 
 		if name == "productDoesNotExist" {
 			returnState := make(map[string][]byte) // Return empty map
@@ -203,21 +204,21 @@ func TestDeleteProduct(t *testing.T) {
 			).Once()
 		}
 
-		// if name == "storeProductsWithoutDeleted" {
-		// 	returnState := make(map[string][]byte)
-		// 	returnState[toDeleteGtinAddress] = serialize(testProductSlice)
-		// 	testContext.On("GetState", []string{toDeleteGtinAddress}).Return(
-		// 		returnState,
-		// 		nil,
-		// 	)
+		if name == "storeProductsWithoutDeleted" {
+			returnState := make(map[string][]byte)
+			returnState[toDeleteGtinAddress] = serialize(testProductSlice)
+			testContext.On("GetState", []string{toDeleteGtinAddress}).Return(
+				returnState,
+				nil,
+			)
 
-		// 	data := serialize([]*Product{&testProduct})
-		// 	testContext.On("SetState", map[string][]byte{toDeleteGtinAddress: data}).Return(
-		// 		[]string{toDeleteGtinAddress},
-		// 		nil,
-		// 	).Once()
+			data := serialize([]*Product{&testProduct})
+			testContext.On("SetState", map[string][]byte{toDeleteGtinAddress: data}).Return(
+				[]string{toDeleteGtinAddress},
+				nil,
+			).Once()
 
-		// }
+		}
 
 		testState := &MdState{
 			context:      testContext,
