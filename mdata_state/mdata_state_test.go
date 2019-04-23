@@ -119,7 +119,7 @@ func TestSetProduct(t *testing.T) {
 		if name == "newProduct" {
 			returnState := make(map[string][]byte)
 			testContext.On("GetState", []string{testGtinAddress}).Return(
-				products,
+				returnState,
 				nil,
 			)
 
