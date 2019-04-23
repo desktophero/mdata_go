@@ -190,7 +190,7 @@ func TestDeleteProduct(t *testing.T) {
 			testContext.On("DeleteState", []string{testGtinAddress}).Return(
 				make([]string),
 				nil,
-			).Once
+			).Once()
 		}
 
 		// if name == "storeProductsWithoutDeleted" {
