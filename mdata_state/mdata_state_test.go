@@ -53,13 +53,13 @@ func TestGetProduct(t *testing.T) {
 		testContext := &mockContext{}
 
 		if name == "existingProduct" {
-			returnProduct := make(map[string][]byte)
+			returnState := make(map[string][]byte)
 			testProductSlice := make([]*Product, 1)
 			testProductSlice[0] = &testProduct
 
-			returnProduct[testGtinAddress] = serialize(testProductSlice)
+			returnState[testGtinAddress] = serialize(testProductSlice)
 			testContext.On("GetState", []string{testGtinAddress}).Return(
-				returnProduct,
+				returnState,
 				nil,
 			)
 		}
@@ -117,7 +117,7 @@ func TestSetProduct(t *testing.T) {
 		testProductSlice[0] = &testProduct
 
 		if name == "newProduct" {
-			products := make(map[string]*Product)
+			returnState := make(map[string][]byte)
 			testContext.On("GetState", []string{testGtinAddress}).Return(
 				products,
 				nil,
