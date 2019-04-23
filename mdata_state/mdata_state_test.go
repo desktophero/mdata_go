@@ -168,16 +168,27 @@ func TestDeleteProduct(t *testing.T) {
 			gtin: testGtin,
 			err:  nil,
 		},
-		// "storeProductsWithoutDeleted": { //If other products exist, just storeProducts at the state address of the deleted Gtin
-		// 	gtin: testGtin,
-		// 	err:  nil,
-		// },
+		"storeProductsWithoutDeleted": { //If other products exist, just storeProducts at the state address of the deleted Gtin
+			gtin: testGtin,
+			err:  nil,
+		},
 	}
 
 	for name, test := range tests {
 		t.Logf("Running test case: %s", name)
 
 		testContext := &mockContext{}
+		testProductSlice := make([]*Product, 2)
+		testProductSlice[0] = &testProduct
+		toDeleteGtin := "555555555555"
+		toDeleteGtinAddress := makeAddress(toDeleteGtin)
+		testProduct2 := Product{
+			Gtin:  toDeleteGtin,
+			Mtrl:  "77777-777777",
+			State: "INACTIVE",
+		}
+
+		testProductSlice[1] = &testProduct2
 
 		if name == "productDoesNotExist" {
 			returnState := make(map[string][]byte) // Return empty map
@@ -192,21 +203,21 @@ func TestDeleteProduct(t *testing.T) {
 			).Once()
 		}
 
-		// if name == "storeProductsWithoutDeleted" {
-		// 	returnState := make(map[string][]byte)
-		// 	returnState[testGtinAddress] = serialize(testProductSlice)
-		// 	testContext.On("GetState", []string{testGtinAddress}).Return(
-		// 		returnState,
-		// 		nil,
-		// 	)
+		if name == "storeProductsWithoutDeleted" {
+			returnState := make(map[string][]byte)
+			returnState[toDeleteGtinAddress] = serialize(testProductSlice)
+			testContext.On("GetState", []string{toDeleteGtinAddress}).Return(
+				returnState,
+				nil,
+			)
 
-		// 	data := serialize([]*Product{&testSetNewProduct})
-		// 	testContext.On("DeleteState", map[string][]byte{testGtinAddress: data}).Return(
-		// 		[]string{testGtinAddress},
-		// 		nil,
-		// 	).Once
+			data := serialize([]*Product{&testProduct})
+			testContext.On("SetState", map[string][]byte{toDeleteGtinAddress: data}).Return(
+				[]string{toDeleteGtinAddress},
+				nil,
+			).Once()
 
-		// }
+		}
 
 		testState := &MdState{
 			context:      testContext,
